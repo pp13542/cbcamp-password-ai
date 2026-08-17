@@ -1,0 +1,12 @@
+.env
+training/dataset.jsonl
+data/*.jsonl
+adapters/*
+!adapters/.gitkeep
+hf-cache/
+__pycache__/
+**/__pycache__/
+*.pyc
+*.log
+.pytest_cache/
+

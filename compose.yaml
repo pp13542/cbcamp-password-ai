@@ -1,0 +1,27 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      FLAG: ${FLAG:-}
+      APP_ENV: ${APP_ENV:-development}
+      MODEL_NAME: ${MODEL_NAME:-Qwen/Qwen2.5-0.5B-Instruct}
+      LORA_ADAPTER_PATH: ${LORA_ADAPTER_PATH:-}
+      LOAD_MODEL_ON_STARTUP: ${LOAD_MODEL_ON_STARTUP:-false}
+      MAX_NEW_TOKENS: ${MAX_NEW_TOKENS:-128}
+      EMERGENCY_STABLE_MODE: ${EMERGENCY_STABLE_MODE:-false}
+    volumes:
+      - ./adapters:/app/adapters
+      - ./training:/app/training
+      - hf-cache:/app/hf-cache
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  hf-cache:
+
