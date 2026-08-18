@@ -11,7 +11,7 @@ import torch
 from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from app.challenge import build_system_prompt, emergency_answer, env_bool
+from app.challenge import build_system_prompt, emergency_answer, env_bool, recovery_flow_answer
 
 logger = logging.getLogger(__name__)
 MODEL_UNAVAILABLE_MESSAGE = (
@@ -64,6 +64,9 @@ class ModelService:
             self.model = model
 
     def answer(self, message: str, history: list[dict[str, str]]) -> str:
+        recovery_answer = recovery_flow_answer(message, history)
+        if recovery_answer is not None:
+            return recovery_answer
         if self.emergency_stable_mode:
             return emergency_answer(message)
         if not self.model_loaded:

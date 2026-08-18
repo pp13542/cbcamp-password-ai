@@ -22,7 +22,7 @@ async def lifespan(_: FastAPI):
     yield
 
 
-app = FastAPI(title="비밀번호 찾기 도움 AI", lifespan=lifespan)
+app = FastAPI(title="비밀번호 설정 도움 AI", lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 
@@ -47,4 +47,3 @@ def health() -> HealthResponse:
 def chat(request: ChatRequest) -> ChatResponse:
     history = [item.model_dump() for item in request.history]
     return ChatResponse(answer=service.answer(request.message, history))
-
